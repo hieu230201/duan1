@@ -47,7 +47,7 @@ public class loginFormm extends JFrame{
             txtPass.setText(loginService.acconutDaLuu()[1]);
         }
         this.setResizable(false); // chống chỉnh sửa size frame
-
+        System.out.println(111);
 
         // nút thoát chương trình
         btnThoat.addActionListener(new ActionListener() {
