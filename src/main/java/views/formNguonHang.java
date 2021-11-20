@@ -5,6 +5,10 @@ import dao.RendererHighlighted;
 import dao.serviceNguonHang;
 import model.NguonHang;
 
+import dao.RendererHighlighted;
+import dao.serviceNguonHang;
+import model.NguonHang;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -75,6 +79,7 @@ public class formNguonHang extends JFrame{
                 try {
                     formChinh = new formChinh();
                 } catch (IOException ex) {
+
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
@@ -83,6 +88,10 @@ public class formNguonHang extends JFrame{
                 }
                 formChinh.setUser(user);
                 formChinh.setRole(role);
+
+                    ex.printStackTrace();
+                }
+
                 dispose();
             }
         });
@@ -128,11 +137,15 @@ public class formNguonHang extends JFrame{
                         loadtblXoa();
                         xoaForm();
                     } catch (SQLException ex) {
+
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
+
+                        ex.printStackTrace();
+
                     }
                     return;
 
@@ -143,11 +156,15 @@ public class formNguonHang extends JFrame{
                         loadtbl();
                         xoaForm();
                     } catch (SQLException ex) {
+
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
+
+                        ex.printStackTrace();
+
                     }
                 }
             }
@@ -164,11 +181,15 @@ public class formNguonHang extends JFrame{
                     loadtbl();
                     xoaForm();
                 } catch (SQLException ex) {
+
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
                         exc.printStackTrace();
                     }
+
+                    ex.printStackTrace();
+
                 }
             }
         });
@@ -203,11 +224,15 @@ public class formNguonHang extends JFrame{
                     loadtbl();
                     xoaForm();
                 } catch (SQLException ex) {
+
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
                         exc.printStackTrace();
                     }
+
+                    ex.printStackTrace();
+
                 }
             }
         });
@@ -220,11 +245,15 @@ public class formNguonHang extends JFrame{
                     try {
                         loadtblXoa();
                     } catch (SQLException ex) {
+
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
+
+                        ex.printStackTrace();
+
                     }
                     check = true;
                     JOptionPane.showMessageDialog(null, "Đã hiện thị những nguồn hàng bị xóa");
@@ -242,11 +271,15 @@ public class formNguonHang extends JFrame{
                     try {
                         loadtbl();
                     } catch (SQLException ex) {
+
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
+
+                        ex.printStackTrace();
+
                     }
                     JOptionPane.showMessageDialog(null, "Đã hiện thị những nguồn hàng hiện tại");
                     btnTblXoa.setText("Hiện thị nguồn hàng đã xóa");
@@ -260,6 +293,7 @@ public class formNguonHang extends JFrame{
             }
         });
     }
+
 
     // khởi tạo 1 giá trị nguồn hàng
     private NguonHang nguonHang(){
@@ -366,6 +400,102 @@ public class formNguonHang extends JFrame{
 //            return false;
 //        }
 
+
+
+
+    // khởi tạo 1 giá trị nguồn hàng
+    private NguonHang nguonHang(){
+        return new NguonHang(1,txtHoTen.getText(), txtDiaChi.getText(), txtSDT.getText());
+    }
+
+
+    // xóa form
+    private void xoaForm(){
+        txtHoTen.setText("");
+        txtDiaChi.setText("");
+        txtSDT.setText("");
+    }
+
+    // Load dữ liệu lên table
+    private void loadtbl() throws SQLException {
+        _dtm = (DefaultTableModel) tblNguonHang.getModel();
+        while (_dtm.getRowCount() > 0) {
+            _dtm.setRowCount(0);
+        }
+        for (NguonHang nv : _list.getlist()
+        ) {
+            _dtm.addRow(new Object[]{
+                    nv.getTenNguonHang(), nv.getDiaChi(), nv.getSdt()});
+        }
+    }
+
+
+    // Load dữ liệu lên table xóa
+    private void loadtblXoa() throws SQLException {
+        _dtm = (DefaultTableModel) tblNguonHang.getModel();
+        while (_dtm.getRowCount() > 0) {
+            _dtm.setRowCount(0);
+        }
+        for (NguonHang nv : _list.getlistXoa()
+        ) {
+            _dtm.addRow(new Object[]{
+                    nv.getTenNguonHang(), nv.getDiaChi(), nv.getSdt()});
+        }
+    }
+
+
+
+    // Phương thức set giá trị cho 2 biến phân quyền
+    public void setUser(String user) {
+        this.user = user;
+    }
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+
+    // đọc dữ liệu phân quyền lên form
+    private void luuText() {
+        System.out.println(user + " bên form nguồn hàng");
+    }
+
+
+    // phương thức check lỗi
+
+    private boolean loi(){
+        if (txtHoTen.getText().isEmpty() || txtHoTen.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Tên không được để trống", "Cảnh Báo", 2);
+            txtHoTen.requestFocus();
+            return false;
+        }
+
+        if (!txtHoTen.getText().matches("[^0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{1,}")) {
+            JOptionPane.showMessageDialog(null, "Tên vui lòng chữ cái", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (txtDiaChi.getText().isEmpty() || txtDiaChi.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Địa chỉ không được để trống", "Cảnh Báo", 2);
+            txtDiaChi.requestFocus();
+            return false;
+        }
+
+        if (!txtDiaChi.getText().matches("[^0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{1,}")) {
+            JOptionPane.showMessageDialog(null, "Địa chỉ vui lòng chữ cái", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+
+        if (txtSDT.getText().isEmpty() || txtSDT.getText().isBlank()) {
+            JOptionPane.showMessageDialog(null, "Sđt không được để trống", "Cảnh Báo", 2);
+            txtSDT.requestFocus();
+            return false;
+        }
+
+        if (!txtSDT.getText().matches("0[0-9]{10}")) {
+            JOptionPane.showMessageDialog(null, "Bạn đã nhập sai sđt", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
         return  true;
     }
