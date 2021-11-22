@@ -5,16 +5,13 @@ import dao.RendererHighlighted;
 import dao.serviceNguonHang;
 import model.NguonHang;
 
-import dao.RendererHighlighted;
-import dao.serviceNguonHang;
-import model.NguonHang;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +19,7 @@ import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-public class formNguonHang extends JFrame{
+public class formNguonHang extends JFrame {
     private String user;
     private int role;
     private JPanel mainPanel;
@@ -40,17 +37,18 @@ public class formNguonHang extends JFrame{
     DefaultTableModel _dtm;
     serviceNguonHang _list = new serviceNguonHang();
     boolean check = false;
+
     public formNguonHang() throws SQLException, IOException {
 
         this.setTitle("Nguồn Hàng");
         this.setContentPane(mainPanel);
-        this.setSize(500,300);
+        this.setSize(500, 300);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(2);
         this.setResizable(false); // chống chỉnh sửa size frame
         this.setVisible(true);
         _dtm = (DefaultTableModel) tblNguonHang.getModel();
-        _dtm.setColumnIdentifiers(new String []{
+        _dtm.setColumnIdentifiers(new String[]{
                 "Tên Nguồn Hàng", "Địa Chỉ", "Số Điện Thoại"
         });
         tblNguonHang.setModel(_dtm);
@@ -79,7 +77,6 @@ public class formNguonHang extends JFrame{
                 try {
                     formChinh = new formChinh();
                 } catch (IOException ex) {
-
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
@@ -88,10 +85,6 @@ public class formNguonHang extends JFrame{
                 }
                 formChinh.setUser(user);
                 formChinh.setRole(role);
-
-                    ex.printStackTrace();
-                }
-
                 dispose();
             }
         });
@@ -129,42 +122,34 @@ public class formNguonHang extends JFrame{
         btnThem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(check){
-                    int i  = tblNguonHang.getSelectedRow();
+                if (check) {
+                    int i = tblNguonHang.getSelectedRow();
                     try {
                         NguonHang nguonHang = _list.getlistXoa().get(i);
                         JOptionPane.showMessageDialog(null, _list.themLai(nguonHang.getId()));
                         loadtblXoa();
                         xoaForm();
                     } catch (SQLException ex) {
-
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
-
-                        ex.printStackTrace();
-
                     }
                     return;
 
                 }
-                if(loi()){
+                if (loi()) {
                     try {
                         JOptionPane.showMessageDialog(null, _list.themNguonHang(nguonHang()));
                         loadtbl();
                         xoaForm();
                     } catch (SQLException ex) {
-
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
-
-                        ex.printStackTrace();
-
                     }
                 }
             }
@@ -181,15 +166,11 @@ public class formNguonHang extends JFrame{
                     loadtbl();
                     xoaForm();
                 } catch (SQLException ex) {
-
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
                         exc.printStackTrace();
                     }
-
-                    ex.printStackTrace();
-
                 }
             }
         });
@@ -201,9 +182,9 @@ public class formNguonHang extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 int i = tblNguonHang.getSelectedRow();
                 System.out.println(i);
-                txtHoTen.setText(String.valueOf(tblNguonHang.getValueAt(i,0)));
-                txtDiaChi.setText(String.valueOf(tblNguonHang.getValueAt(i,1)));
-                txtSDT.setText(String.valueOf(tblNguonHang.getValueAt(i,2)));
+                txtHoTen.setText(String.valueOf(tblNguonHang.getValueAt(i, 0)));
+                txtDiaChi.setText(String.valueOf(tblNguonHang.getValueAt(i, 1)));
+                txtSDT.setText(String.valueOf(tblNguonHang.getValueAt(i, 2)));
             }
         });
 
@@ -220,19 +201,15 @@ public class formNguonHang extends JFrame{
                 int i = tblNguonHang.getSelectedRow();
                 try {
                     NguonHang nguonHang = _list.getlist().get(i);
-                    JOptionPane.showMessageDialog(null, _list.updateNH(nguonHang(),nguonHang.getId()));
+                    JOptionPane.showMessageDialog(null, _list.updateNH(nguonHang(), nguonHang.getId()));
                     loadtbl();
                     xoaForm();
                 } catch (SQLException ex) {
-
                     try {
                         baoLoi(ex);
                     } catch (IOException exc) {
                         exc.printStackTrace();
                     }
-
-                    ex.printStackTrace();
-
                 }
             }
         });
@@ -241,19 +218,15 @@ public class formNguonHang extends JFrame{
         btnTblXoa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!check){
+                if (!check) {
                     try {
                         loadtblXoa();
                     } catch (SQLException ex) {
-
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
-
-                        ex.printStackTrace();
-
                     }
                     check = true;
                     JOptionPane.showMessageDialog(null, "Đã hiện thị những nguồn hàng bị xóa");
@@ -267,19 +240,15 @@ public class formNguonHang extends JFrame{
                     return;
                 }
 
-                if(check){
+                if (check) {
                     try {
                         loadtbl();
                     } catch (SQLException ex) {
-
                         try {
                             baoLoi(ex);
                         } catch (IOException exc) {
                             exc.printStackTrace();
                         }
-
-                        ex.printStackTrace();
-
                     }
                     JOptionPane.showMessageDialog(null, "Đã hiện thị những nguồn hàng hiện tại");
                     btnTblXoa.setText("Hiện thị nguồn hàng đã xóa");
@@ -294,15 +263,14 @@ public class formNguonHang extends JFrame{
         });
     }
 
-
     // khởi tạo 1 giá trị nguồn hàng
-    private NguonHang nguonHang(){
-        return new NguonHang(1,txtHoTen.getText(), txtDiaChi.getText(), txtSDT.getText());
+    private NguonHang nguonHang() {
+        return new NguonHang(1, txtHoTen.getText(), txtDiaChi.getText(), txtSDT.getText());
     }
 
 
     // xóa form
-    private void xoaForm(){
+    private void xoaForm() {
         txtHoTen.setText("");
         txtDiaChi.setText("");
         txtSDT.setText("");
@@ -352,6 +320,7 @@ public class formNguonHang extends JFrame{
     public void setUser(String user) {
         this.user = user;
     }
+
     public void setRole(int role) {
         this.role = role;
     }
@@ -365,7 +334,7 @@ public class formNguonHang extends JFrame{
 
     // phương thức check lỗi
 
-    private boolean loi(){
+    private boolean loi() {
 //        if (txtHoTen.getText().isEmpty() || txtHoTen.getText().isBlank()) {
 //            JOptionPane.showMessageDialog(null, "Tên không được để trống", "Cảnh Báo", 2);
 //            txtHoTen.requestFocus();
@@ -401,106 +370,11 @@ public class formNguonHang extends JFrame{
 //        }
 
 
-
-
-    // khởi tạo 1 giá trị nguồn hàng
-    private NguonHang nguonHang(){
-        return new NguonHang(1,txtHoTen.getText(), txtDiaChi.getText(), txtSDT.getText());
-    }
-
-
-    // xóa form
-    private void xoaForm(){
-        txtHoTen.setText("");
-        txtDiaChi.setText("");
-        txtSDT.setText("");
-    }
-
-    // Load dữ liệu lên table
-    private void loadtbl() throws SQLException {
-        _dtm = (DefaultTableModel) tblNguonHang.getModel();
-        while (_dtm.getRowCount() > 0) {
-            _dtm.setRowCount(0);
-        }
-        for (NguonHang nv : _list.getlist()
-        ) {
-            _dtm.addRow(new Object[]{
-                    nv.getTenNguonHang(), nv.getDiaChi(), nv.getSdt()});
-        }
-    }
-
-
-    // Load dữ liệu lên table xóa
-    private void loadtblXoa() throws SQLException {
-        _dtm = (DefaultTableModel) tblNguonHang.getModel();
-        while (_dtm.getRowCount() > 0) {
-            _dtm.setRowCount(0);
-        }
-        for (NguonHang nv : _list.getlistXoa()
-        ) {
-            _dtm.addRow(new Object[]{
-                    nv.getTenNguonHang(), nv.getDiaChi(), nv.getSdt()});
-        }
-    }
-
-
-
-    // Phương thức set giá trị cho 2 biến phân quyền
-    public void setUser(String user) {
-        this.user = user;
-    }
-    public void setRole(int role) {
-        this.role = role;
-    }
-
-
-    // đọc dữ liệu phân quyền lên form
-    private void luuText() {
-        System.out.println(user + " bên form nguồn hàng");
-    }
-
-
-    // phương thức check lỗi
-
-    private boolean loi(){
-        if (txtHoTen.getText().isEmpty() || txtHoTen.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Tên không được để trống", "Cảnh Báo", 2);
-            txtHoTen.requestFocus();
-            return false;
-        }
-
-        if (!txtHoTen.getText().matches("[^0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{1,}")) {
-            JOptionPane.showMessageDialog(null, "Tên vui lòng chữ cái", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-        if (txtDiaChi.getText().isEmpty() || txtDiaChi.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Địa chỉ không được để trống", "Cảnh Báo", 2);
-            txtDiaChi.requestFocus();
-            return false;
-        }
-
-        if (!txtDiaChi.getText().matches("[^0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]{1,}")) {
-            JOptionPane.showMessageDialog(null, "Địa chỉ vui lòng chữ cái", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-
-        if (txtSDT.getText().isEmpty() || txtSDT.getText().isBlank()) {
-            JOptionPane.showMessageDialog(null, "Sđt không được để trống", "Cảnh Báo", 2);
-            txtSDT.requestFocus();
-            return false;
-        }
-
-        if (!txtSDT.getText().matches("0[0-9]{10}")) {
-            JOptionPane.showMessageDialog(null, "Bạn đã nhập sai sđt", "Lỗi", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-        return  true;
+        return true;
     }
 
     public static void main(String[] args) throws SQLException, IOException {
         new formNguonHang();
     }
+
 }
