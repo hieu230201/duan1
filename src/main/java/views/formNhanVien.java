@@ -410,7 +410,7 @@ public class formNhanVien extends JFrame {
 
 
         if (!String.valueOf(txtMk.getPassword()).matches("[0-9a-zA-Z]{1,}")) {
-            JOptionPane.showMessageDialog(null, "mật khẩu nhân viên vui lòng là chữ la tinh hoặc số", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "mật khẩu nhân viên là chữ la tinh hoặc số", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
