@@ -1,6 +1,8 @@
 package dao;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import model.NguonHang;
+import model.NhanVien;
 import untils.Connectt;
 
 import java.sql.PreparedStatement;
@@ -87,7 +89,7 @@ public class serviceNguonHang {
         _list.clear();
         while (rs.next()) {
             NguonHang nguonHang = new NguonHang(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
-                _list.add(nguonHang);
+            _list.add(nguonHang);
         }
         return _list;
     }
