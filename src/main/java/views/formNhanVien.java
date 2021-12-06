@@ -40,12 +40,14 @@ public class formNhanVien extends JFrame {
     private JTextField txtMaNV;
     private JTextField txtTimKiem;
     private JButton btnTBLXoa;
+    private JPanel pnlQuanLi;
+    private JPanel pnlDanhSach;
     DefaultTableModel _dtm;
     serviceNhanVien _list = new serviceNhanVien();
     boolean check = false;
 
     public formNhanVien() throws SQLException, IOException {
-
+        tabbedPane1.setSelectedIndex(1);
         this.setTitle("Quản lí nhân viên");
         this.setContentPane(mainPanel);
         this.setSize(700, 500);
@@ -124,8 +126,7 @@ public class formNhanVien extends JFrame {
                 if (loi()) {
                     try {
                         JOptionPane.showMessageDialog(null, _list.addNV(nv()));
-                        _dtm.addRow(new Object[]{
-                                nv().getManv(), nv().getHoten(), nv().getDaichi(), nv().getSdt(), nv().getEmail(), nv().getMatkhau(), nv().getRole() == 1 ? "Trưởng Phòng" : "Nhân Viên"});
+                        loadtbl();
                         xoaForm();
                     } catch (SQLException ex) {
                         try {
@@ -202,7 +203,22 @@ public class formNhanVien extends JFrame {
         btnXoa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 String input = JOptionPane.showInputDialog("Mời bạn nhập mã nhân viên cần xóa");
+                if(check){
+                    try {
+                        if(_list.boNhanVien(input)){
+                            JOptionPane.showMessageDialog(null, "Xóa nhân viên thành công");
+                            loadtblXoa();
+                            return;
+                        }else {
+                            JOptionPane.showMessageDialog(null, "Nhân viên này có liên quan tới các hóa đơn nên không thể xóa");
+                            return;
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 try {
                     JOptionPane.showMessageDialog(null, _list.deleteNV(input));
                     xoaForm();
@@ -387,7 +403,7 @@ public class formNhanVien extends JFrame {
             return false;
         }
 
-        if (!txtSDT.getText().matches("0[0-9]{10}")) {
+        if (!txtSDT.getText().matches("0[0-9]{9}")) {
             JOptionPane.showMessageDialog(null, "Bạn đã nhập sai sđt", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return false;
         }
@@ -410,7 +426,7 @@ public class formNhanVien extends JFrame {
 
 
         if (!String.valueOf(txtMk.getPassword()).matches("[0-9a-zA-Z]{1,}")) {
-            JOptionPane.showMessageDialog(null, "mật khẩu nhân viên là chữ la tinh hoặc số", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "mật khẩu nhân viên vui lòng là chữ la tinh hoặc số", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
