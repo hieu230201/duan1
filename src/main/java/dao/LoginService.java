@@ -14,6 +14,7 @@ public class LoginService {
 
 
 
+
     // phương thức đăng nhập
     public NhanVien login (String username, String password) throws SQLException {
         NhanVien nv = new NhanVien();
@@ -29,6 +30,17 @@ public class LoginService {
             return nv;
         }
         JOptionPane.showMessageDialog(null, "Bạn đã nhập sai acconut, vui lòng nhập lại");
+        return null;
+    }
+
+    //phương thức khóa tài khoản
+    public String khoaTK(String username) throws SQLException {
+        String sql = "update nhanvien set isActive = 0 where manv = ?";
+        PreparedStatement pm = con.con().prepareStatement(sql);
+        pm.setString(1, username);
+        if(pm.executeUpdate() > 0){
+            return "tài khoản của bạn đã bị khóa";
+        }
         return null;
     }
 
